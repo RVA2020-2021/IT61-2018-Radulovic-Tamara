@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import rva.jpa.Radnik;
+import rva.jpa.Sektor;
 import rva.repository.RadnikRepository;
+import rva.repository.SektorRepository;
 
 @CrossOrigin
 @RestController
@@ -31,6 +33,9 @@ public class RadnikRestController {
 	@Autowired
 	private RadnikRepository radnikRepository;
 	
+	@Autowired
+	private SektorRepository sektorRepository;
+	
 	@GetMapping("radnik")
 	@ApiOperation(value = "Vraća kolekciju svih radnika iz baze podataka")
 	public Collection<Radnik> getRadnici(){
@@ -41,6 +46,12 @@ public class RadnikRestController {
 	 @ApiOperation(value = "Vraća radnika iz baze podataka čija je id vrednost prosleđena kao path varijabla")
 	 public Radnik getRadnik(@PathVariable("id") Integer id) {
 		 return radnikRepository.getOne(id);
+	 }
+	 
+	 @GetMapping("radnikZaSektorId/{id}")
+	 public Collection<Radnik> radnikPoSektoruId(@PathVariable("id") Integer id) {
+		 Sektor s = sektorRepository.getOne(id);
+		 return radnikRepository.findBySektor(s);
 	 }
 	 
 	 @GetMapping("radnikIme/{ime}")

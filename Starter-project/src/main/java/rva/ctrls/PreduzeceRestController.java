@@ -75,6 +75,8 @@ public class PreduzeceRestController {
 		if(!preduzeceRepository.existsById(id)) {
 			return new ResponseEntity<Preduzece>(HttpStatus.NO_CONTENT);
 		}
+		
+		jdbcTemplate.execute("Delete from radnik where sektor in (select id from sektor where preduzece= " + id +")"); 
 		jdbcTemplate.execute("delete from sektor where preduzece = " + id);
 		preduzeceRepository.deleteById(id);
 		if(id == -100) {
